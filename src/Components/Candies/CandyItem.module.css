@@ -1,0 +1,25 @@
+.item{
+    display: flex;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    border-bottom: 1px solid #ccc;
+    
+}
+
+.btn1,
+.btn2,
+.btn3{
+    font: inherit;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid #8a2b06;
+    margin-left: 1rem;
+}
+
+.btn1:hover,
+.btn2:hover,
+.btn3:hover{
+    background-color: #5a1a01;
+    border-color: #5a1a01;
+    color: white;
+}

@@ -1,17 +1,32 @@
-import './App.css';
-import Form from './Components/Form/Form';
+import "./App.css";
+import Form from "./Components/Form/Form";
+import CandyItem from "./Components/Candies/CandyItem";
+import { useState } from "react";
+import Header from "./Components/Layout/Header";
+import Cart from "./Components/Cart/cart";
+import CartProvider from "./Store/CartProvider";
 
 function App() {
-  const submitHandler = (candyData) => {
-    console.log(candyData)
-  }
+  const [cartIsShown, setCartIsShown] = useState(false);
+
+  const showCartHandler = () => {
+    setCartIsShown(true);
+  };
+
+  const hideCartHandler = () => {
+    setCartIsShown(false);
+  };
+
   return (
-    <div className="App">
-      <header className='color:red'>
-        <h1>Candy Shop</h1>
-      </header>
-      <Form onSubmit={submitHandler}/>
-    </div>
+    <CartProvider>
+      {cartIsShown && <Cart onHideCart={hideCartHandler} />}
+      <Header onShowCart={showCartHandler} />
+
+      <main>
+        <Form />
+        <CandyItem />
+      </main>
+    </CartProvider>
   );
 }
 
