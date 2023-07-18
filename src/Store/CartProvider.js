@@ -54,6 +54,7 @@ const CartProvider = (props) => {
     });
   };
 
+
   const cartContext = {
     items: items,
     totalAmount: totalAmount,

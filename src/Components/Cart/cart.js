@@ -8,6 +8,7 @@ const Cart = (props) => {
   const cartCtx = useContext(CartContext);
   const cartItemRemoveHandler = (id) => {
     cartCtx.removeItem(id);
+    
   };
 
   const cartItemAddHandler = (item) => {
@@ -36,7 +37,7 @@ const Cart = (props) => {
       {cartItems}
       <div className={classes.total}>
         <span>Total Amount</span>
-        <span>${cartCtx.totalAmount.toFixed(2)}</span>
+        <span>{cartCtx.totalAmount.toFixed(2)}Rs.</span>
       </div>
       <div className={classes.actions}>
         <button className={classes["button--alt"]} onClick={props.onHideCart}>
