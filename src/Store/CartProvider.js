@@ -1,67 +1,58 @@
 import React, { useState, useEffect } from "react";
 import CartContext from "./cart-context";
+import axios from "axios";
 
 const CartProvider = (props) => {
   const [items, updateItems] = useState([]);
-  const [totalAmount, setTotalAmount] = useState(0);
+
+  const onRefresh = async () => {
+    const res = await axios.get(
+      "https://crudcrud.com/api/836ba48a200641619c74dd371c38a1c7/candy"
+    );
+    const data = res.data;
+    
+    // Merge items with the same name
+    const mergedItems = [];
+    data.forEach((item) => {
+      const existingItem = mergedItems.find((existing) => existing.name === item.name);
+      if (existingItem) {
+        existingItem.quantity += parseInt(item.quantity);
+      } else {
+        mergedItems.push(item);
+      }
+    });
+    
+    updateItems(mergedItems);
+  };
 
   useEffect(() => {
-    calculateTotalHandler();
-  });
+    onRefresh();
+  }, []);
 
-  const addItemToCartHandler = (item) => {
+  const addItemToCartHandler = async (item) => {
     const existingItemIndex = items.findIndex(
-      (cartItem) => cartItem.id === item.id
+      (cartItem) => cartItem.name === item.name
     );
 
     if (existingItemIndex === -1) {
-      updateItems((prevItems) => [...prevItems, item]);
+      // Item doesn't exist in the cart, add it
+      updateItems([...items, item]);
     } else {
-      updateItems((prevItems) => {
-        const temp = [...prevItems];
-        temp[existingItemIndex].quantity += parseInt(item.quantity);
-        return temp;
-      });
+      // Item already exists in the cart, update the quantity
+      const temp = [...items];
+      temp[existingItemIndex].quantity =
+        parseInt(temp[existingItemIndex].quantity) + parseInt(item.quantity);
+      updateItems(temp);
     }
+    await axios.post(
+      "https://crudcrud.com/api/836ba48a200641619c74dd371c38a1c7/candy",
+      item
+    );
   };
-
-  const increaseQuantityHandler = (id, quantity) => {
-    updateItems((prevItems) => {
-      const updatedItems = prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + quantity } : item
-      );
-      return updatedItems;
-    });
-  };
-
-  const calculateTotalHandler = () => {
-    let total = 0;
-    items.forEach((item) => {
-      total += Number(item.price) * Number(item.quantity);
-    });
-    setTotalAmount(total);
-  };
-
-  const removeItemFromCartHandler = (id) => {
-    updateItems((prevItems) => {
-      const updatedItems = prevItems.map((item) => {
-        if (item.id === id && item.quantity > 0) {
-          return { ...item, quantity: item.quantity - 1 };
-        }
-        return item;
-      });
-      return updatedItems.filter((item) => item.quantity >= 1);
-    });
-  };
-
 
   const cartContext = {
     items: items,
-    totalAmount: totalAmount,
     addItem: addItemToCartHandler,
-    removeItem: removeItemFromCartHandler,
-    calculateTotal: calculateTotalHandler,
-    increaseQuantity: increaseQuantityHandler,
   };
 
   return (

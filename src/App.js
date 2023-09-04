@@ -5,6 +5,7 @@ import { useState } from "react";
 import Header from "./Components/Layout/Header";
 import Cart from "./Components/Cart/cart";
 import CartProvider from "./Store/CartProvider";
+import ItemProvider from "./Store/ItemProvider";
 
 function App() {
   const [cartIsShown, setCartIsShown] = useState(false);
@@ -19,13 +20,15 @@ function App() {
 
   return (
     <CartProvider>
-      {cartIsShown && <Cart onHideCart={hideCartHandler} />}
-      <Header onShowCart={showCartHandler} />
+      <ItemProvider>
+        {cartIsShown && <Cart onHideCart={hideCartHandler} />}
+        <Header onShowCart={showCartHandler} />
 
-      <main>
-        <Form />
-        <CandyItem />
-      </main>
+        <main>
+          <Form />
+          <CandyItem />
+        </main>
+      </ItemProvider>
     </CartProvider>
   );
 }

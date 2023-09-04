@@ -32,16 +32,9 @@
     color: #363636;
   }
   
-  .actions {
-    display: flex;
-    flex-direction: column;
-  }
+ 
   
-  @media (min-width: 768px) {
-    .actions {
-      flex-direction: row;
-    }
-  }
+
   
   .cart-item button {
     font: inherit;

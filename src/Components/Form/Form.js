@@ -1,13 +1,13 @@
 import { useContext, useState } from "react";
 import classes from './Form.module.css';
-import CartContext from "../../Store/cart-context";
+import ItemContext from "../../Store/item-context";
 
 const Form = (props) => {
   const [enteredName, setEnteredName] = useState("");
   const [enteredDesc, setEnteredDesc] = useState("");
   const [enteredPrice, setEnteredPrice] = useState("");
 
-  const cartCntx = useContext(CartContext);
+  const itemCtx = useContext(ItemContext);
 
   const nameChangeHandler = (event) => {
     setEnteredName(event.target.value);
@@ -27,8 +27,9 @@ const Form = (props) => {
       desc: enteredDesc,
       price: enteredPrice,
       quantity: 0
+      
     };
-    cartCntx.addItem(candyData);
+    itemCtx.addItem({...candyData});
 
     setEnteredName("");
     setEnteredDesc("");
